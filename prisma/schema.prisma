@@ -11,8 +11,37 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
+model Workout {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    ownerId   String
+    exercises Exercise[]
+}
+
+model Exercise {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name      String
+    sets      Set[]
+    workoutId String
+    workout   Workout @relation(fields: [workoutId], references: [id])
+
+    @@index([workoutId])
+}
+
+model Set {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    weightInKg Float
+    reps       Int
+    exerciseId String
+    exercise   Exercise @relation(fields: [exerciseId], references: [id])
+
+    @@index([exerciseId])
 }
