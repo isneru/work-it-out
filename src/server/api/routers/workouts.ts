@@ -1,9 +1,10 @@
+import { TRPCError } from "@trpc/server"
 import {
   createTRPCRouter,
   privateProcedure,
   publicProcedure
 } from "server/api/trpc"
-import { mergeClerkUsers } from "server/helpers"
+import { mergeClerkUsers, ratelimit } from "server/helpers"
 
 export const workoutsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -26,6 +27,9 @@ export const workoutsRouter = createTRPCRouter({
       })
     ) */
     .mutation(async ({ ctx, input }) => {
+      const { success } = await ratelimit.limit(ctx.authedUserId)
+      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
+
       const workout = await ctx.prisma.workout.create({
         data: {
           ownerId: ctx.authedUserId

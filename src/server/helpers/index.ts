@@ -1,6 +1,8 @@
 import { clerkClient } from "@clerk/nextjs/dist/api"
 import { Workout } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
+import { Ratelimit } from "@upstash/ratelimit"
+import { Redis } from "@upstash/redis"
 
 export async function mergeClerkUsers(workouts: Workout[]) {
   const users = await clerkClient.users.getUserList({
@@ -24,3 +26,9 @@ export async function mergeClerkUsers(workouts: Workout[]) {
     }
   })
 }
+
+export const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "1 d"),
+  analytics: true
+})
