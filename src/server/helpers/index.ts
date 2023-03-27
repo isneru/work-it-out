@@ -10,7 +10,7 @@ export async function mergeClerkUsers(workouts: Workout[]) {
 
   const filteredUsers = users.map(user => ({
     id: user.id!,
-    username: user.username ?? user.firstName,
+    username: (user.username ?? user.firstName)!,
     profileImageUrl: user.profileImageUrl!
   }))
 

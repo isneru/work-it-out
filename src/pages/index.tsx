@@ -1,7 +1,9 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { type NextPage } from "next"
+import Image from "next/image"
 import { useState } from "react"
-import { api, RouterOutputs } from "utils/api"
+import { api, type RouterOutputs } from "utils/api"
+import { dayjs } from "utils/dayjs"
 
 type WorkoutWithUser = RouterOutputs["workouts"]["getAll"][number]
 const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
@@ -9,14 +11,16 @@ const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
   console.log(owner)
   return (
     <div className="flex items-center gap-3">
-      <img
-        className="w-h-10 h-10 rounded ring-2 ring-white"
+      <Image
+        width={40}
+        height={40}
+        className="rounded ring-2 ring-white"
         src={owner.profileImageUrl}
         alt={`${owner.username}'s profile picture`}
       />
       <div>
         <p>Workout by {owner.username}</p>
-        <p>On {workout.createdAt.toLocaleDateString()}</p>
+        <p>{dayjs(workout.createdAt).fromNow()}</p>
       </div>
     </div>
   )
@@ -30,8 +34,10 @@ const CreateWorkout = () => {
 
   return (
     <div className="mt-4 flex items-center gap-4">
-      <img
-        className="h-[100px] w-[100px] rounded ring ring-white"
+      <Image
+        width={100}
+        height={100}
+        className="rounded ring ring-white"
         src={user.profileImageUrl}
         alt={`${user.username}'s profile picture`}
       />
