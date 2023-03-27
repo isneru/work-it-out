@@ -2,8 +2,10 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { Spinner } from "components"
 import { type NextPage } from "next"
 import Image from "next/image"
+import { useContext } from "react"
 import { api, type RouterOutputs } from "utils/api"
 import { dayjs } from "utils/dayjs"
+import { ToastContext } from "utils/providers"
 
 type WorkoutWithUser = RouterOutputs["workouts"]["getAll"][number]
 const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
@@ -27,6 +29,7 @@ const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
 }
 
 const CreateWorkoutWizard = () => {
+  const { addToast } = useContext(ToastContext)
   const { user } = useUser()
 
   const ctx = api.useContext()
@@ -35,6 +38,16 @@ const CreateWorkoutWizard = () => {
     api.workouts.create.useMutation({
       onSuccess: () => {
         ctx.workouts.getAll.refetch()
+        addToast("Workout created!", 2000)
+      },
+      onError: error => {
+        const errorMessage = error.data?.zodError?.fieldErrors.content
+
+        if (errorMessage && errorMessage[0]) {
+          addToast(errorMessage[0], 1000)
+        } else {
+          addToast("Something went wrong, please try again later!", 1000)
+        }
       }
     })
 
