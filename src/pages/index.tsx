@@ -21,8 +21,8 @@ const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
         alt={`${owner.username}'s profile picture`}
       />
       <div>
-        <p>Workout by {owner.username}</p>
-        <p>{dayjs(workout.createdAt).fromNow()}</p>
+        <p className="font-medium">Workout by {owner.username}</p>
+        <p className="text-zinc-400">{dayjs(workout.createdAt).fromNow()}</p>
       </div>
     </div>
   )
@@ -38,15 +38,15 @@ const CreateWorkoutWizard = () => {
     api.workouts.create.useMutation({
       onSuccess: () => {
         ctx.workouts.getAll.refetch()
-        addToast("Workout created!", 2000)
+        addToast("Workout created!", 3000)
       },
       onError: error => {
         const errorMessage = error.data?.zodError?.fieldErrors.content
 
         if (errorMessage && errorMessage[0]) {
-          addToast(errorMessage[0], 1000)
+          addToast(errorMessage[0], 3000)
         } else {
-          addToast("Something went wrong, please try again later!", 1000)
+          addToast("Something went wrong, please try again later!", 3000)
         }
       }
     })
@@ -69,14 +69,14 @@ const CreateWorkoutWizard = () => {
           <button
             onClick={() => createWorkout()}
             disabled
-            className="flex w-full items-center gap-2 rounded bg-white p-2 text-black">
+            className="flex w-full items-center gap-2 rounded bg-white py-2 px-3 font-medium text-black">
             Creating <Spinner />
           </button>
         )}
         {!isPosting && (
           <button
             onClick={() => createWorkout()}
-            className="flex w-full items-center gap-2 rounded bg-white p-2 text-black">
+            className="flex w-full items-center gap-2 rounded bg-white py-2 px-3 font-medium text-black">
             Create Workout
           </button>
         )}
