@@ -2,7 +2,6 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { Spinner } from "components"
 import { type NextPage } from "next"
 import Image from "next/image"
-import { useState } from "react"
 import { api, type RouterOutputs } from "utils/api"
 import { dayjs } from "utils/dayjs"
 
@@ -27,14 +26,22 @@ const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
   )
 }
 
-const CreateWorkout = () => {
-  const [exerciseName, setExerciseName] = useState("")
+const CreateWorkoutWizard = () => {
   const { user } = useUser()
+
+  const ctx = api.useContext()
+
+  const { mutate: createWorkout, isLoading: isPosting } =
+    api.workouts.create.useMutation({
+      onSuccess: () => {
+        ctx.workouts.getAll.refetch()
+      }
+    })
 
   if (!user) return null
 
   return (
-    <div className="mt-4 flex items-center gap-4">
+    <div className="mt-4 flex flex-col items-center gap-4">
       <Image
         width={100}
         height={100}
@@ -42,22 +49,25 @@ const CreateWorkout = () => {
         src={user.profileImageUrl}
         alt={`${user.username}'s profile picture`}
       />
-      <div className="flex flex-col items-start gap-2">
-        <input
-          value={exerciseName}
-          onChange={e => setExerciseName(e.target.value)}
-          type="text"
-          placeholder="Exercise name"
-          className="bg-transparent p-1 outline-none"
-        />
-        {
+      <fieldset
+        disabled={isPosting}
+        className="flex flex-col items-start gap-2 disabled:opacity-70">
+        {isPosting && (
           <button
-            className="w-full rounded bg-white p-2 text-black"
-            disabled={!exerciseName}>
-            Create Exercise
+            onClick={() => createWorkout()}
+            disabled
+            className="flex w-full items-center gap-2 rounded bg-white p-2 text-black">
+            Creating <Spinner />
           </button>
-        }
-      </div>
+        )}
+        {!isPosting && (
+          <button
+            onClick={() => createWorkout()}
+            className="flex w-full items-center gap-2 rounded bg-white p-2 text-black">
+            Create Workout
+          </button>
+        )}
+      </fieldset>
     </div>
   )
 }
@@ -73,7 +83,7 @@ const Feed = () => {
     )
 
   return (
-    <div className="flex w-[400px] flex-col items-center bg-zinc-900 py-5">
+    <div className="flex w-[400px] flex-col items-center gap-2 bg-zinc-900 py-5">
       {data?.map(fullWorkout => (
         <WorkoutView data={fullWorkout} key={fullWorkout.workout.id} />
       ))}
@@ -95,7 +105,7 @@ const Home: NextPage = () => {
       <div className="flex grow flex-col items-center justify-center">
         {isSignedIn && <SignOutButton>Sign Out</SignOutButton>}
         {!isSignedIn && <SignInButton mode="modal">Sign In</SignInButton>}
-        {isSignedIn && <CreateWorkout />}
+        {isSignedIn && <CreateWorkoutWizard />}
       </div>
     </main>
   )
