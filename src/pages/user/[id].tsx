@@ -1,12 +1,23 @@
+import { Spinner } from "components"
 import { type GetStaticProps, type NextPage } from "next"
 import Head from "next/head"
+import Link from "next/link"
 import { ssg } from "server/helpers/ssg"
 import { api } from "utils/api"
 
 const SingleUserPage: NextPage<{ userId: string }> = ({ userId }) => {
-  const { data } = api.users.getById.useQuery({ userId })
+  const { data, isLoading } = api.users.getById.useQuery({ userId })
 
-  if (!data) return <div>404</div>
+  if (isLoading) return <Spinner asPage width={60} height={60} />
+  if (!data)
+    return (
+      <div className="absolute top-0 right-0 flex h-screen w-screen flex-col items-center justify-center">
+        404
+        <Link className="underline" href="/">
+          Go Back
+        </Link>
+      </div>
+    )
 
   return (
     <>
