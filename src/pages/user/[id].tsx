@@ -1,20 +1,44 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
-import { type NextPage } from "next"
+import { type GetStaticProps, type NextPage } from "next"
+import Head from "next/head"
+import { ssg } from "server/helpers/ssg"
+import { api } from "utils/api"
 
-const SingleUserPage: NextPage = () => {
-  const { isSignedIn, isLoaded: isUserLoaded } = useUser()
+const SingleUserPage: NextPage<{ userId: string }> = ({ userId }) => {
+  const { data } = api.users.getById.useQuery({ userId })
 
-  if (!isUserLoaded) return null
+  if (!data) return <div>404</div>
 
   return (
-    <main className="flex min-h-screen">
-      <div className="flex grow flex-col items-center justify-center">
-        <h1>User Page</h1>
-        {isSignedIn && <SignOutButton>Sign Out</SignOutButton>}
-        {!isSignedIn && <SignInButton mode="modal">Sign In</SignInButton>}
-      </div>
-    </main>
+    <>
+      <Head>
+        <title>{`${data.username}'s profile`}</title>
+      </Head>
+      <main className="flex min-h-screen">
+        <div className="flex grow flex-col items-center justify-center">
+          <h1>User Page</h1>
+        </div>
+      </main>
+    </>
   )
 }
 
 export default SingleUserPage
+
+export const getStaticProps: GetStaticProps = async ctx => {
+  const id = ctx.params?.id
+  if (typeof id !== "string") throw new Error("id must be a string")
+
+  ssg.users.getById.prefetch({ userId: id })
+
+  return {
+    props: {
+      dehydratedState: ssg.dehydrate(),
+      userId: id
+    }
+  }
+}
+
+export const getStaticPaths = () => ({
+  paths: [],
+  fallback: true
+})

@@ -95,4 +95,13 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   })
 })
 
+const checkUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  return next({
+    ctx: {
+      authedUserId: ctx.authedUserId
+    }
+  })
+})
+
 export const privateProcedure = t.procedure.use(enforceUserIsAuthed)
+export const protectedProcedure = t.procedure.use(checkUserIsAuthed)
