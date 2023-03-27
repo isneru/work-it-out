@@ -2,6 +2,7 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { Spinner } from "components"
 import { type NextPage } from "next"
 import Image from "next/image"
+import Link from "next/link"
 import { useContext } from "react"
 import { api, type RouterOutputs } from "utils/api"
 import { dayjs } from "utils/dayjs"
@@ -12,7 +13,9 @@ const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
   const { workout, owner } = data
   console.log(owner)
   return (
-    <div className="flex items-center gap-3">
+    <Link
+      href={`/workout/${workout.id}`}
+      className="flex w-full items-center gap-3 rounded py-1 px-2 transition-colors hover:bg-white/5">
       <Image
         width={40}
         height={40}
@@ -21,10 +24,15 @@ const WorkoutView = ({ data }: { data: WorkoutWithUser }) => {
         alt={`${owner.username}'s profile picture`}
       />
       <div>
-        <p className="font-medium">Workout by {owner.username}</p>
+        <p className="font-medium">
+          Workout by{" "}
+          <Link className="hover:underline" href={`/user/${owner.id}`}>
+            {owner.username}
+          </Link>
+        </p>
         <p className="text-zinc-400">{dayjs(workout.createdAt).fromNow()}</p>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -96,7 +104,7 @@ const Feed = () => {
     )
 
   return (
-    <div className="flex w-[400px] flex-col items-center gap-2 bg-zinc-900 py-5">
+    <div className="flex w-[400px] flex-col items-center gap-2 bg-zinc-900 py-5 px-2">
       {data?.map(fullWorkout => (
         <WorkoutView data={fullWorkout} key={fullWorkout.workout.id} />
       ))}
