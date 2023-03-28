@@ -42,6 +42,30 @@ export const CreateExerciseWizard = ({
       }
     })
 
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setFormData({
+      ...formData,
+      [e.target.id]:
+        e.target.id === "name" ? e.target.value : e.target.valueAsNumber
+    })
+  }
+
+  function cleanForm() {
+    setFormData({
+      name: "",
+      reps: 0,
+      weightInKg: 0
+    })
+    setIsFormOpen(false)
+  }
+
+  function submit() {
+    mutate({
+      workoutId,
+      ...formData
+    })
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     reps: 0,
@@ -68,7 +92,7 @@ export const CreateExerciseWizard = ({
       </AnimatePresence>
       <AnimatePresence>
         {isFormOpen && (
-          <motion.div
+          <motion.form
             variants={variants}
             initial="initial"
             animate="animate"
@@ -79,83 +103,62 @@ export const CreateExerciseWizard = ({
             className="mt-3 flex w-full flex-col gap-2 overflow-hidden rounded bg-zinc-800">
             <fieldset
               disabled={isMutationLoading}
-              className="disabled:opacity-60">
-              <div className="flex flex-col px-3 pt-3">
-                <label htmlFor="name">Exercise name</label>
+              className="flex flex-col px-3 pt-3 disabled:opacity-60">
+              <label htmlFor="name">Exercise name</label>
+              <input
+                value={formData.name}
+                onChange={handleInputChange}
+                id="name"
+                type="text"
+                autoComplete="off"
+                className="rounded bg-zinc-900 py-1 px-2 outline-none "
+              />
+            </fieldset>
+            <div className="grid grid-cols-2">
+              <fieldset
+                disabled={isMutationLoading}
+                className="flex flex-col p-3 disabled:opacity-60">
+                <label htmlFor="reps">Reps</label>
                 <input
-                  value={formData.name}
-                  onChange={e =>
-                    setFormData({
-                      ...formData,
-                      name: e.target.value
-                    })
-                  }
-                  id="name"
-                  type="text"
+                  value={formData.reps}
+                  onChange={handleInputChange}
+                  id="reps"
+                  type="number"
+                  min={0}
                   autoComplete="off"
                   className="rounded bg-zinc-900 py-1 px-2 outline-none"
                 />
-              </div>
-              <div className="flex w-full">
-                <div className="flex grow flex-col p-3">
-                  <label htmlFor="reps">Reps</label>
-                  <input
-                    value={formData.reps}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        reps: e.target.valueAsNumber
-                      })
-                    }
-                    id="reps"
-                    type="number"
-                    min={0}
-                    autoComplete="off"
-                    className="rounded bg-zinc-900 py-1 px-2 outline-none"
-                  />
-                  <button
-                    onClick={() => {
-                      setIsFormOpen(false)
-                      setFormData({
-                        name: "",
-                        reps: 0,
-                        weightInKg: 0
-                      })
-                    }}
-                    className="mt-8 flex w-full items-center justify-center gap-2 rounded bg-red-400 px-3 py-2 font-medium text-black transition-colors hover:bg-red-500">
-                    Cancel
-                  </button>
-                </div>
-                <div className="flex grow flex-col p-3">
-                  <label htmlFor="weight">Weight (kg)</label>
-                  <input
-                    value={formData.weightInKg}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        weightInKg: e.target.valueAsNumber
-                      })
-                    }
-                    id="weight"
-                    type="number"
-                    min={0}
-                    autoComplete="off"
-                    className="rounded bg-zinc-900 py-1 px-2 outline-none"
-                  />
-                  <button
-                    onClick={() =>
-                      mutate({
-                        workoutId,
-                        ...formData
-                      })
-                    }
-                    className="mt-8 flex w-full items-center justify-center gap-2 rounded bg-white px-3 py-2 font-medium text-black">
-                    Complete
-                  </button>
-                </div>
-              </div>
-            </fieldset>
-          </motion.div>
+              </fieldset>
+              <fieldset
+                disabled={isMutationLoading}
+                className="flex flex-col p-3 disabled:opacity-60">
+                <label htmlFor="weightInKg">Weight (kg)</label>
+                <input
+                  value={formData.weightInKg}
+                  onChange={handleInputChange}
+                  id="weightInKg"
+                  type="number"
+                  min={0}
+                  autoComplete="off"
+                  className="rounded bg-zinc-900 py-1 px-2 outline-none"
+                />
+              </fieldset>
+              <button
+                disabled={isMutationLoading}
+                type="button"
+                onClick={submit}
+                className="order-4 m-3 flex items-center justify-center gap-2 rounded bg-white px-3 py-2 font-medium text-black disabled:opacity-60">
+                Complete
+              </button>
+              <button
+                type="button"
+                disabled={isMutationLoading}
+                onClick={cleanForm}
+                className="order-3 m-3 flex items-center justify-center gap-2 rounded bg-red-400 px-3 py-2 font-medium text-black transition-colors disabled:opacity-60 hover:bg-red-500">
+                Cancel
+              </button>
+            </div>
+          </motion.form>
         )}
       </AnimatePresence>
     </>
