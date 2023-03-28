@@ -24,8 +24,7 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
   const [ref, { height }] = useMeasure()
   useEffect(() => {
     scroll.animateScroll.scrollTo(height, {
-      duration: 300,
-      smooth: true,
+      duration: 500,
       isDynamic: true,
       containerId: "form"
     })
