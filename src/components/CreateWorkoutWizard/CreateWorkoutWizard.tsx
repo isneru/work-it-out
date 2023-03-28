@@ -21,7 +21,6 @@ export const CreateWorkoutWizard = (props: CreateWorkoutWizardProps) => {
       },
       onError: error => {
         const errorMessage = error.data?.zodError?.fieldErrors.content
-        console.log(error.data?.zodError)
         if (errorMessage && errorMessage[0]) {
           addToast(errorMessage[0], 3000)
         } else {
