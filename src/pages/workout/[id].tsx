@@ -9,6 +9,9 @@ import { type GetStaticProps, type NextPage } from "next"
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect } from "react"
+import * as scroll from "react-scroll"
+import useMeasure from "react-use-measure"
 import { ssg } from "server/helpers/ssg"
 import { api } from "utils/api"
 import { dayjs } from "utils/dayjs"
@@ -17,6 +20,16 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
   const { data, isLoading, refetch } = api.workouts.getById.useQuery({
     workoutId
   })
+
+  const [ref, { height }] = useMeasure()
+  useEffect(() => {
+    scroll.animateScroll.scrollTo(height, {
+      duration: 300,
+      smooth: true,
+      isDynamic: true,
+      containerId: "form"
+    })
+  }, [height])
 
   if (isLoading) return <Spinner asPage width={60} height={60} />
   if (!data) return <ErrorPage />
@@ -55,7 +68,10 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
           </div>
           <div className="flex flex-col items-center gap-4 py-5 pl-5 pr-3">
             <span className="text-3xl font-bold">Exercises</span>
-            <div className="w-full overflow-y-scroll pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-black/40 scrollbar-thumb-rounded-full">
+            <div
+              id="form"
+              ref={ref}
+              className="w-full overflow-y-scroll pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-black/40 scrollbar-thumb-rounded-full">
               <ExerciseFeed workoutId={workoutId} />
               <CreateExerciseWizard
                 hasPermissions={data.hasPermissions}
