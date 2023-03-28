@@ -1,10 +1,13 @@
+import { clerkClient } from "@clerk/nextjs/server"
 import { TRPCError } from "@trpc/server"
 import {
   createTRPCRouter,
   privateProcedure,
+  protectedProcedure,
   publicProcedure
 } from "server/api/trpc"
-import { mergeClerkUsers, ratelimit } from "server/helpers"
+import { filterUserForClient, mergeClerkUsers, ratelimit } from "server/helpers"
+import { z } from "zod"
 
 export const workoutsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -20,27 +23,53 @@ export const workoutsRouter = createTRPCRouter({
     return users
   }),
 
-  create: privateProcedure
-    /*     .input(
-      z.object({
-        name: z.string().min(1).max(50)
-      })
-    ) */
-    .mutation(async ({ ctx, input }) => {
-      const { success } = await ratelimit.limit(ctx.authedUserId)
-      if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
+  create: privateProcedure.mutation(async ({ ctx, input }) => {
+    const { success } = await ratelimit.limit(ctx.authedUserId)
+    if (!success) throw new TRPCError({ code: "TOO_MANY_REQUESTS" })
 
-      const workout = await ctx.prisma.workout.create({
-        data: {
-          ownerId: ctx.authedUserId
-          /*           exercises: {
-            create: {
-              name: input.name
+    const workout = await ctx.prisma.workout.create({
+      data: {
+        ownerId: ctx.authedUserId
+      }
+    })
+
+    return workout
+  }),
+  getById: protectedProcedure
+    .input(
+      z.object({
+        workoutId: z.string()
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const workout = await ctx.prisma.workout.findUnique({
+        where: {
+          id: input.workoutId
+        },
+        include: {
+          exercises: {
+            include: {
+              sets: true
             }
-          } */
+          }
         }
       })
 
-      return workout
+      if (!workout) throw new TRPCError({ code: "NOT_FOUND" })
+
+      const user = await clerkClient.users.getUser(workout.ownerId)
+      if (!user) throw new TRPCError({ code: "NOT_FOUND" })
+      const filteredUser = filterUserForClient(user)
+
+      return {
+        workout: {
+          id: workout.id,
+          exercises: workout.exercises,
+          createdAt: workout.createdAt,
+          updatedAt: workout.updatedAt
+        },
+        owner: filteredUser,
+        hasPermissions: ctx.authedUserId === workout.ownerId
+      }
     })
 })

@@ -20,7 +20,7 @@ export const usersRouter = createTRPCRouter({
 
       return {
         ...filteredUser,
-        isAuthed: ctx.authedUserId === user.id
+        hasPermissions: ctx.authedUserId === user.id
       }
     })
 })

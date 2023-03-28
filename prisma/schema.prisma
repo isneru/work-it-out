@@ -25,10 +25,11 @@ model Exercise {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    name      String
-    sets      Set[]
-    workoutId String
-    workout   Workout @relation(fields: [workoutId], references: [id])
+    name String
+    sets Set[]
+
+    workout   Workout? @relation(fields: [workoutId], references: [id])
+    workoutId String?
 
     @@index([workoutId])
 }

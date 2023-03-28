@@ -1,3 +1,4 @@
+import { exercisesRouter } from "server/api/routers/exercises"
 import { usersRouter } from "server/api/routers/users"
 import { workoutsRouter } from "server/api/routers/workouts"
 import { createTRPCRouter } from "server/api/trpc"
@@ -9,7 +10,8 @@ import { createTRPCRouter } from "server/api/trpc"
  */
 export const appRouter = createTRPCRouter({
   workouts: workoutsRouter,
-  users: usersRouter
+  users: usersRouter,
+  exercises: exercisesRouter
 })
 
 // export type definition of API
