@@ -50,7 +50,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
               duration: 0.5,
               type: "tween"
             }}
-            className="fixed left-1/2 flex -translate-x-1/2 items-center justify-center gap-2 rounded bg-white/10 py-2 px-4 ring-1 ring-white/20">
+            className="fixed left-1/2 flex -translate-x-1/2 items-center justify-center gap-2 rounded bg-zinc-900 py-2 px-4 ring-1 ring-zinc-700">
             {toast.message}
           </motion.div>
         )}

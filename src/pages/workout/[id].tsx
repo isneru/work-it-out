@@ -1,28 +1,24 @@
-import { Spinner } from "components"
+import { ErrorPage, Spinner } from "components"
 import { AnimatePresence, motion } from "framer-motion"
 import { type GetStaticProps, type NextPage } from "next"
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { ssg } from "server/helpers/ssg"
 import { api } from "utils/api"
 import { dayjs } from "utils/dayjs"
+import { ToastContext } from "utils/providers"
 
 const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
+  const { addToast } = useContext(ToastContext)
   const { data, isLoading, refetch } = api.workouts.getById.useQuery({
     workoutId
   })
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [formData, setFormData] = useState({
-    name: "",
-    reps: 0,
-    weightInKg: 0
-  })
-
   const { mutate, isLoading: isMutationLoading } =
     api.exercises.create.useMutation({
       onSuccess: () => {
+        addToast("Exercise created!", 3000)
         setIsFormOpen(false)
         setFormData({
           name: "",
@@ -30,19 +26,30 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
           weightInKg: 0
         })
         refetch()
+      },
+      onError: error => {
+        const errorMessage =
+          error.data?.zodError?.fieldErrors.name ??
+          error.data?.zodError?.fieldErrors.reps ??
+          error.data?.zodError?.fieldErrors.weightInKg
+
+        if (errorMessage && errorMessage[0]) {
+          addToast(errorMessage[0], 3000)
+        } else {
+          addToast("Something went wrong, please try again later!", 3000)
+        }
       }
     })
 
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    reps: 0,
+    weightInKg: 0
+  })
+
   if (isLoading) return <Spinner asPage width={60} height={60} />
-  if (!data)
-    return (
-      <div className="absolute top-0 right-0 flex h-screen w-screen flex-col items-center justify-center">
-        404
-        <Link className="underline" href="/">
-          Go Back
-        </Link>
-      </div>
-    )
+  if (!data) return <ErrorPage />
 
   return (
     <>
@@ -51,7 +58,7 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
       </Head>
       <main className="flex min-h-screen">
         <div className="flex grow flex-col items-center justify-center">
-          <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:h-4/5 lg:w-2/3 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md">
+          <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md min-[1200px]:h-4/5 min-[1200px]:w-[90%] 2xl:w-2/3">
             <div className="flex flex-col gap-4 py-5 px-5">
               <h1 className="text-3xl font-bold">Viewing Workout</h1>
               <div className="flex items-center gap-3">

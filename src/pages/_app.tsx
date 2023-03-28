@@ -1,10 +1,10 @@
 import { ClerkProvider } from "@clerk/nextjs"
+import { dark } from "@clerk/themes"
 import { type AppType } from "next/app"
 import Head from "next/head"
 import { api } from "utils/api"
 import { ToastProvider } from "utils/providers"
 
-import { dark } from "@clerk/themes"
 import "styles/globals.css"
 
 const MyApp: AppType = ({ Component, pageProps }) => {
