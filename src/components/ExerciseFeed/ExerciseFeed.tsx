@@ -1,12 +1,14 @@
 import { ExerciseView, Spinner } from "components"
+import { AnimatePresence } from "framer-motion"
 import { api } from "utils/api"
+import { dayjs } from "utils/dayjs"
 
 interface ExerciseFeedProps {
   workoutId: string
 }
 
 export const ExerciseFeed = ({ workoutId }: ExerciseFeedProps) => {
-  const { data, isLoading, refetch } = api.workouts.getById.useQuery({
+  const { data, isLoading } = api.workouts.getById.useQuery({
     workoutId
   })
 
@@ -19,9 +21,16 @@ export const ExerciseFeed = ({ workoutId }: ExerciseFeedProps) => {
 
   return (
     <div className="flex w-full flex-col items-center gap-3">
-      {data?.workout.exercises.map(exercise => (
-        <ExerciseView key={exercise.id} exercise={exercise} />
-      ))}
+      <AnimatePresence>
+        {data?.workout.exercises.map((exercise, index) => (
+          <ExerciseView
+            index={index}
+            key={exercise.id}
+            exercise={exercise}
+            isNew={dayjs(exercise.createdAt).fromNow() === "a few seconds ago"}
+          />
+        ))}
+      </AnimatePresence>
     </div>
   )
 }

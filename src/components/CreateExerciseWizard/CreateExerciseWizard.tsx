@@ -61,7 +61,7 @@ export const CreateExerciseWizard = ({
               duration: 0.2
             }}
             onClick={() => setIsFormOpen(true)}
-            className="flex w-full items-center justify-center gap-2 rounded bg-white font-medium text-black">
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded bg-white font-medium text-black">
             <span className="py-2">Add Exercise</span>
           </motion.button>
         )}
@@ -76,7 +76,7 @@ export const CreateExerciseWizard = ({
             transition={{
               duration: 0.4
             }}
-            className="flex w-full flex-col gap-2 overflow-hidden rounded bg-zinc-800">
+            className="mt-3 flex w-full flex-col gap-2 overflow-hidden rounded bg-zinc-800">
             <fieldset
               disabled={isMutationLoading}
               className="disabled:opacity-60">

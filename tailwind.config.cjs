@@ -2,9 +2,9 @@
 const config = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {}
   },
-  plugins: [],
-};
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })]
+}
 
-module.exports = config;
+module.exports = config

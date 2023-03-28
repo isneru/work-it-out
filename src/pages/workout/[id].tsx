@@ -53,14 +53,16 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center gap-4 py-5 px-5">
+          <div className="flex flex-col items-center gap-4 py-5 pl-5 pr-3">
             <span className="text-3xl font-bold">Exercises</span>
-            <ExerciseFeed workoutId={workoutId} />
-            <CreateExerciseWizard
-              hasPermissions={data.hasPermissions}
-              refetch={refetch}
-              workoutId={workoutId}
-            />
+            <div className="w-full overflow-y-scroll pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-black/40 scrollbar-thumb-rounded-full">
+              <ExerciseFeed workoutId={workoutId} />
+              <CreateExerciseWizard
+                hasPermissions={data.hasPermissions}
+                refetch={refetch}
+                workoutId={workoutId}
+              />
+            </div>
           </div>
         </div>
       </Layout>
