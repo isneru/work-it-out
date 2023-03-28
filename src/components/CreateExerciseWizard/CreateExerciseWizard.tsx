@@ -1,8 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { useContext, useState } from "react"
-import { api } from "utils/api"
+import { CreateExerciseWizardHelper } from "utils/hooks"
 import { variants } from "utils/motion"
-import { ToastContext } from "utils/providers"
 
 interface CreateExerciseWizardProps {
   refetch: () => void
@@ -15,63 +13,19 @@ export const CreateExerciseWizard = ({
   hasPermissions,
   workoutId
 }: CreateExerciseWizardProps) => {
-  const { addToast } = useContext(ToastContext)
-  const { mutate, isLoading: isMutationLoading } =
-    api.exercises.create.useMutation({
-      onSuccess: () => {
-        addToast("Exercise created!", 3000)
-        setIsFormOpen(false)
-        setFormData({
-          name: "",
-          reps: 0,
-          weightInKg: 0
-        })
-        refetch()
-      },
-      onError: error => {
-        const errorMessage =
-          error.data?.zodError?.fieldErrors.name ??
-          error.data?.zodError?.fieldErrors.reps ??
-          error.data?.zodError?.fieldErrors.weightInKg
-
-        if (errorMessage && errorMessage[0]) {
-          addToast(errorMessage[0], 3000)
-        } else {
-          addToast("Something went wrong, please try again later!", 3000)
-        }
-      }
-    })
-
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormData({
-      ...formData,
-      [e.target.id]:
-        e.target.id === "name" ? e.target.value : e.target.valueAsNumber
-    })
-  }
-
-  function cleanForm() {
-    setFormData({
-      name: "",
-      reps: 0,
-      weightInKg: 0
-    })
-    setIsFormOpen(false)
-  }
-
-  function submit() {
-    mutate({
-      workoutId,
-      ...formData
-    })
-  }
-
-  const [formData, setFormData] = useState({
-    name: "",
-    reps: 0,
-    weightInKg: 0
+  const {
+    isFormOpen,
+    setIsFormOpen,
+    formData,
+    submitForm,
+    cleanForm,
+    isMutationLoading,
+    handleInputChange
+  } = CreateExerciseWizardHelper({
+    refetch,
+    workoutId
   })
-  const [isFormOpen, setIsFormOpen] = useState(false)
+
   return (
     <>
       <AnimatePresence initial={false}>
@@ -146,7 +100,7 @@ export const CreateExerciseWizard = ({
               <button
                 disabled={isMutationLoading}
                 type="button"
-                onClick={submit}
+                onClick={submitForm}
                 className="order-4 m-3 flex items-center justify-center gap-2 rounded bg-white px-3 py-2 font-medium text-black disabled:opacity-60">
                 Complete
               </button>
