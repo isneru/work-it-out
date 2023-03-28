@@ -4,9 +4,9 @@ import { api } from "utils/api"
 interface WorkoutFeedProps {}
 
 export const WorkoutFeed = (props: WorkoutFeedProps) => {
-  const { data, isLoading: isWorkoutsLoading } = api.workouts.getAll.useQuery()
+  const { data, isLoading } = api.workouts.getAll.useQuery()
 
-  if (isWorkoutsLoading)
+  if (isLoading)
     return (
       <div className="flex w-[400px] flex-col items-center justify-center bg-zinc-900 py-5">
         <Spinner width={40} height={40} />
