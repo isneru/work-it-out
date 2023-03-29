@@ -10,14 +10,21 @@ export const exercisesRouter = createTRPCRouter({
           .string()
           .min(1, { message: "Please provide an exercise name" })
           .max(20),
-        reps: z
-          .number()
-          .min(1, { message: "Please provide a number of reps" })
-          .max(2000),
-        weightInKg: z
-          .number()
-          .min(1, { message: "Please provide a weight amount" })
-          .max(2000)
+        sets: z
+          .array(
+            z.object({
+              reps: z
+                .number()
+                .min(1, { message: "Please provide a number of reps" })
+                .max(2000),
+              weightInKg: z
+                .number()
+                .min(1, { message: "Please provide a weight amount" })
+                .max(2000)
+            })
+          )
+          .min(1, { message: "Please provide at least one set" })
+          .max(20, { message: "Are you a monster?" })
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -30,9 +37,8 @@ export const exercisesRouter = createTRPCRouter({
             }
           },
           sets: {
-            create: {
-              reps: input.reps,
-              weightInKg: input.weightInKg
+            createMany: {
+              data: input.sets
             }
           }
         },

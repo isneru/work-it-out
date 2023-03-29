@@ -39,7 +39,7 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
         <title>Workout</title>
       </Head>
       <Layout>
-        <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md min-[1200px]:h-4/5 min-[1200px]:w-[90%] 2xl:w-2/3">
+        <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md min-[1200px]:max-h-[80%] min-[1200px]:w-[90%] 2xl:w-2/3">
           <div className="flex flex-col gap-4 py-5 px-5">
             <h1 className="text-3xl font-bold">Viewing Workout</h1>
             <div className="flex items-center gap-3">

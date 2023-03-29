@@ -10,25 +10,33 @@ interface CreateExerciseWizardHelperProps {
 interface CreateExerciseWizardHelperReturn {
   isFormOpen: boolean
   setIsFormOpen: React.Dispatch<React.SetStateAction<boolean>>
-  formData: {
-    name: string
-    reps: number
-    weightInKg: number
-  }
+  formData: TFormData
   submitForm(): void
   cleanForm(): void
+  addSetToForm(): void
+  removeSetFromForm(index: number): void
   isMutationLoading: boolean
-  handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void
+  handleInputChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    index?: number
+  ): void
+}
+
+type TFormData = {
+  name: string
+  sets: {
+    reps: number
+    weightInKg: number
+  }[]
 }
 
 export const CreateExerciseWizardHelper = ({
   refetch,
   workoutId
 }: CreateExerciseWizardHelperProps): CreateExerciseWizardHelperReturn => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TFormData>({
     name: "",
-    reps: 0,
-    weightInKg: 0
+    sets: [{ reps: 0, weightInKg: 0 }]
   })
   const [isFormOpen, setIsFormOpen] = useState(false)
 
@@ -55,19 +63,52 @@ export const CreateExerciseWizardHelper = ({
       }
     })
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    index?: number
+  ) {
+    if (index !== undefined) {
+      if (!formData.sets[index]) return
+      return setFormData({
+        ...formData,
+        sets: [
+          ...formData.sets.slice(0, index),
+          {
+            ...formData.sets[index]!,
+            [e.target.id.slice(0, -1)]: e.target.valueAsNumber
+          },
+          ...formData.sets.slice(index + 1)
+        ]
+      })
+    }
+
     setFormData({
       ...formData,
-      [e.target.id]:
-        e.target.id === "name" ? e.target.value : e.target.valueAsNumber
+      name: e.target.value
+    })
+  }
+
+  function removeSetFromForm(index: number) {
+    setFormData({
+      ...formData,
+      sets: [
+        ...formData.sets.slice(0, index),
+        ...formData.sets.slice(index + 1)
+      ]
+    })
+  }
+
+  function addSetToForm() {
+    setFormData({
+      ...formData,
+      sets: [...formData.sets, { reps: 0, weightInKg: 0 }]
     })
   }
 
   function cleanForm() {
     setFormData({
       name: "",
-      reps: 0,
-      weightInKg: 0
+      sets: [{ reps: 0, weightInKg: 0 }]
     })
     setIsFormOpen(false)
   }
@@ -85,6 +126,8 @@ export const CreateExerciseWizardHelper = ({
     formData,
     submitForm,
     cleanForm,
+    addSetToForm,
+    removeSetFromForm,
     isMutationLoading,
     handleInputChange
   }

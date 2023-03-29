@@ -1,3 +1,4 @@
+import { CardStackPlusIcon, TrashIcon } from "@radix-ui/react-icons"
 import { AnimatePresence, motion } from "framer-motion"
 import { CreateExerciseWizardHelper } from "utils/hooks"
 import { variants } from "utils/motion"
@@ -19,6 +20,8 @@ export const CreateExerciseWizard = ({
     formData,
     submitForm,
     cleanForm,
+    addSetToForm,
+    removeSetFromForm,
     isMutationLoading,
     handleInputChange
   } = CreateExerciseWizardHelper({
@@ -68,35 +71,55 @@ export const CreateExerciseWizard = ({
                 className="rounded bg-zinc-900 py-1 px-2 outline-none "
               />
             </fieldset>
+            {formData.sets.map((set, index) => (
+              <div key={index} className="grid grid-cols-2">
+                <fieldset
+                  disabled={isMutationLoading}
+                  className="flex flex-col p-3 disabled:opacity-60">
+                  <label htmlFor={`reps${index}`}>Reps</label>
+                  <input
+                    value={set.reps}
+                    onChange={e => handleInputChange(e, index)}
+                    id={`reps${index}`}
+                    type="number"
+                    min={0}
+                    autoComplete="off"
+                    className="rounded bg-zinc-900 py-1 px-2 outline-none"
+                  />
+                </fieldset>
+                <fieldset
+                  disabled={isMutationLoading}
+                  className="group relative flex flex-col p-3 disabled:opacity-60 ">
+                  <label htmlFor={`weightInKg${index}`}>Weight (kg)</label>
+                  <input
+                    value={set.weightInKg}
+                    onChange={e => handleInputChange(e, index)}
+                    id={`weightInKg${index}`}
+                    type="number"
+                    min={0}
+                    autoComplete="off"
+                    className="rounded bg-zinc-900 py-1 px-2 outline-none"
+                  />
+                  {index != 0 && (
+                    <button
+                      onClick={() => removeSetFromForm(index)}
+                      type="button"
+                      className="absolute right-0 top-0 flex h-8 w-8 translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900 opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100 hover:bg-[#17171b]">
+                      <TrashIcon />
+                    </button>
+                  )}
+                </fieldset>
+              </div>
+            ))}
+            <button
+              disabled={isMutationLoading}
+              type="button"
+              onClick={addSetToForm}
+              className="m-3 flex items-center justify-center gap-2 rounded border-2 border-black/10 bg-zinc-900 px-3 py-2 font-medium shadow-zinc-900 transition-shadow disabled:opacity-60 hover:shadow">
+              +1 Set
+              <CardStackPlusIcon width={24} height={24} />
+            </button>
             <div className="grid grid-cols-2">
-              <fieldset
-                disabled={isMutationLoading}
-                className="flex flex-col p-3 disabled:opacity-60">
-                <label htmlFor="reps">Reps</label>
-                <input
-                  value={formData.reps}
-                  onChange={handleInputChange}
-                  id="reps"
-                  type="number"
-                  min={0}
-                  autoComplete="off"
-                  className="rounded bg-zinc-900 py-1 px-2 outline-none"
-                />
-              </fieldset>
-              <fieldset
-                disabled={isMutationLoading}
-                className="flex flex-col p-3 disabled:opacity-60">
-                <label htmlFor="weightInKg">Weight (kg)</label>
-                <input
-                  value={formData.weightInKg}
-                  onChange={handleInputChange}
-                  id="weightInKg"
-                  type="number"
-                  min={0}
-                  autoComplete="off"
-                  className="rounded bg-zinc-900 py-1 px-2 outline-none"
-                />
-              </fieldset>
               <button
                 disabled={isMutationLoading}
                 type="button"
