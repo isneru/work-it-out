@@ -12,7 +12,7 @@ const Home: NextPage = () => {
   if (!isUserLoaded) return null
 
   return (
-    <main className="flex min-h-screen">
+    <main className="flex h-screen">
       <WorkoutFeed />
       <div className="flex grow flex-col items-center justify-center">
         {isSignedIn && <SignOutButton>Sign Out</SignOutButton>}

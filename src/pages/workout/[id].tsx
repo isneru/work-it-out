@@ -30,7 +30,20 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
     })
   }, [height])
 
-  if (isLoading) return <Spinner asPage width={60} height={60} />
+  if (isLoading)
+    return (
+      <Layout>
+        <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md min-[1200px]:max-h-[80%] min-[1200px]:w-[90%] 2xl:w-2/3">
+          <div className="flex items-center justify-center">
+            <Spinner width={40} height={40} />
+          </div>
+          <div className="flex items-center justify-center">
+            <Spinner width={40} height={40} />
+          </div>
+        </div>
+      </Layout>
+    )
+
   if (!data) return <ErrorPage />
 
   return (
@@ -70,7 +83,7 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
             <div
               id="form"
               ref={ref}
-              className="w-full overflow-y-scroll pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-black/40 scrollbar-thumb-rounded-full">
+              className="use-scroll w-full overflow-y-scroll pr-2">
               <ExerciseFeed workoutId={workoutId} />
               <CreateExerciseWizard
                 hasPermissions={data.hasPermissions}
