@@ -51,8 +51,8 @@ export const CreateWorkoutWizard = (props: CreateWorkoutWizardProps) => {
   if (!isLoaded || isLoading) return <Spinner asPage width={60} height={60} />
 
   return (
-    <div className="flex flex-col gap-4 p-6">
-      <div className="flex items-end gap-4">
+    <main className="flex flex-col gap-4 p-6">
+      <header className="flex items-end gap-4">
         <Image
           width={100}
           height={100}
@@ -62,11 +62,11 @@ export const CreateWorkoutWizard = (props: CreateWorkoutWizardProps) => {
         />
         <div>
           <p className="text-2xl font-bold">Welcome back,</p>
-          <strong className="text-5xl font-bold">
+          <span className="text-5xl font-bold">
             {`${user.username ?? user.firstName + " " + user.lastName}!`}
-          </strong>
+          </span>
         </div>
-      </div>
+      </header>
 
       <button
         disabled={isPosting}
@@ -86,6 +86,6 @@ export const CreateWorkoutWizard = (props: CreateWorkoutWizardProps) => {
           You have already created a workout today! Feel free to relax
         </p>
       )}
-    </div>
+    </main>
   )
 }

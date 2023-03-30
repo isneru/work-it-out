@@ -12,10 +12,10 @@ const Home: NextPage = () => {
   if (!isUserLoaded) return null
 
   return (
-    <main className="flex h-screen">
+    <div className="flex h-screen">
       <WorkoutFeed />
       <div className="flex grow">{isSignedIn && <CreateWorkoutWizard />}</div>
-    </main>
+    </div>
   )
 }
 
