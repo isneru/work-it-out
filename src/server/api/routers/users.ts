@@ -8,7 +8,8 @@ export const usersRouter = createTRPCRouter({
   getById: protectedProcedure
     .input(
       z.object({
-        userId: z.string()
+        userId: z.string(),
+        withWorkouts: z.boolean().default(false)
       })
     )
     .query(async ({ input, ctx }) => {
@@ -18,9 +19,32 @@ export const usersRouter = createTRPCRouter({
 
       const filteredUser = filterUserForClient(user)
 
-      return {
-        ...filteredUser,
-        hasPermissions: ctx.authedUserId === user.id
+      if (input.withWorkouts) {
+        const workouts = await ctx.prisma.workout.findMany({
+          where: {
+            ownerId: user.id
+          },
+          include: {
+            exercises: {
+              include: {
+                sets: true
+              }
+            }
+          }
+        })
+
+        return {
+          ...filteredUser,
+          workouts,
+          hasPermissions: ctx.authedUserId === user.id
+        }
+      }
+
+      if (!input.withWorkouts) {
+        return {
+          ...filteredUser,
+          hasPermissions: ctx.authedUserId === user.id
+        }
       }
     })
 })

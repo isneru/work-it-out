@@ -115,7 +115,7 @@ export const CreateExerciseWizard = ({
               disabled={isMutationLoading}
               type="button"
               onClick={addSetToForm}
-              className="m-3 flex items-center justify-center gap-2 rounded border-2 border-black/10 bg-zinc-900 px-3 py-2 font-medium shadow-zinc-900 transition-shadow disabled:opacity-60 hover:shadow">
+              className="use-shadow m-3 flex items-center justify-center gap-2 rounded px-3 py-2 font-medium disabled:opacity-60">
               +1 Set
               <CardStackPlusIcon width={24} height={24} />
             </button>

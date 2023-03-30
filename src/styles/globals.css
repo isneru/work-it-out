@@ -11,6 +11,10 @@ body {
     @apply scrollbar-thin scrollbar-track-transparent scrollbar-thumb-black/40 scrollbar-thumb-rounded-full;
   }
 
+  .use-shadow {
+    @apply border-2 border-black/10 bg-black/50 shadow-black/10 transition-shadow hover:shadow;
+  }
+
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;

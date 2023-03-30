@@ -1,3 +1,4 @@
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
 import { Spinner, WorkoutView } from "components"
 import { AnimatePresence, motion } from "framer-motion"
 import { api } from "utils/api"
@@ -11,13 +12,14 @@ export const WorkoutFeed = (props: WorkoutFeedProps) => {
 
   if (isLoading)
     return (
-      <div className="flex w-[400px] flex-col items-center justify-center bg-zinc-900 py-5">
+      <div className="relative flex w-[400px] flex-col items-center justify-center bg-zinc-900 py-5">
         <Spinner width={40} height={40} />
+        <AuthButton />
       </div>
     )
 
   return (
-    <div className="use-scroll flex w-[400px] flex-col items-center gap-2 overflow-y-scroll bg-zinc-900 py-5 px-2">
+    <div className="use-scroll relative flex w-[400px] flex-col items-center gap-2 overflow-y-scroll bg-zinc-900 py-5 pl-4 pr-2">
       <AnimatePresence>
         {data?.map((fullWorkout, index) => (
           <motion.div
@@ -39,6 +41,30 @@ export const WorkoutFeed = (props: WorkoutFeedProps) => {
           </motion.div>
         ))}
       </AnimatePresence>
+      <AuthButton />
+    </div>
+  )
+}
+
+const AuthButton = () => {
+  const { isSignedIn } = useUser()
+
+  return (
+    <div className="fixed bottom-0 left-0 w-[400px] bg-zinc-900 px-2 pb-5 pt-3">
+      {isSignedIn && (
+        <SignOutButton>
+          <button className="use-shadow mt-auto w-full rounded py-2 font-medium">
+            Sign Out
+          </button>
+        </SignOutButton>
+      )}
+      {!isSignedIn && (
+        <SignInButton mode="modal">
+          <button className="use-shadow mt-auto w-full rounded py-2 font-medium">
+            Sign In
+          </button>
+        </SignInButton>
+      )}
     </div>
   )
 }

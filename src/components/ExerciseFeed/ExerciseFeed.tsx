@@ -15,7 +15,7 @@ export const ExerciseFeed = ({ workoutId }: ExerciseFeedProps) => {
   if (isLoading)
     return (
       <div className="flex w-full flex-col items-center">
-        <Spinner width={40} height={40} />
+        <Spinner className="flex grow" width={40} height={40} />
       </div>
     )
 

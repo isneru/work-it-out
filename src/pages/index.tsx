@@ -1,4 +1,4 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 import { CreateWorkoutWizard, WorkoutFeed } from "components"
 import { type NextPage } from "next"
 import { api } from "utils/api"
@@ -14,11 +14,7 @@ const Home: NextPage = () => {
   return (
     <main className="flex h-screen">
       <WorkoutFeed />
-      <div className="flex grow flex-col items-center justify-center">
-        {isSignedIn && <SignOutButton>Sign Out</SignOutButton>}
-        {!isSignedIn && <SignInButton mode="modal">Sign In</SignInButton>}
-        {isSignedIn && <CreateWorkoutWizard />}
-      </div>
+      <div className="flex grow">{isSignedIn && <CreateWorkoutWizard />}</div>
     </main>
   )
 }
