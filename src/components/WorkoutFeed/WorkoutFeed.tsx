@@ -16,7 +16,7 @@ import { variants } from "utils/motion"
 interface WorkoutFeedProps {}
 
 export const WorkoutFeed = (props: WorkoutFeedProps) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const { data, isLoading } = api.workouts.getAll.useQuery()
   const { isSignedIn } = useUser()
