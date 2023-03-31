@@ -10,61 +10,66 @@ interface WorkoutFeedProps {}
 export const WorkoutFeed = (props: WorkoutFeedProps) => {
   const { data, isLoading } = api.workouts.getAll.useQuery()
 
+  const { isSignedIn } = useUser()
+
   if (isLoading)
     return (
-      <div className="relative flex w-[400px] flex-col items-center justify-center bg-zinc-900 py-5">
-        <Spinner width={40} height={40} />
-        <AuthButton />
-      </div>
+      <aside className="use-scroll flex w-[400px] flex-col items-center justify-center bg-zinc-900 p-5">
+        <Spinner className="flex grow" width={40} height={40} />
+        {isSignedIn ? <LogoutButton /> : <LoginButton />}
+      </aside>
     )
 
   return (
-    <div className="use-scroll relative flex w-[400px] flex-col items-center gap-2 overflow-y-scroll bg-zinc-900 py-5 pl-4 pr-2">
-      <AnimatePresence>
-        {data?.map((fullWorkout, index) => (
-          <motion.div
-            variants={variants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{
-              duration: 0.2,
-              delay:
-                dayjs(fullWorkout.workout.createdAt).fromNow() ===
-                "a few seconds ago"
-                  ? 0
-                  : index * 0.06
-            }}
-            className="w-full"
-            key={fullWorkout.workout.id}>
-            <WorkoutView data={fullWorkout} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
-      <AuthButton />
-    </div>
+    <aside className="flex w-[400px] flex-col items-center gap-2 bg-zinc-900 py-5 pl-5 pr-2">
+      <div className="use-scroll flex w-full grow flex-col items-center gap-2 overflow-y-scroll">
+        <AnimatePresence>
+          {[...data!, ...data!, ...data!]?.map((fullWorkout, index) => (
+            <motion.div
+              variants={variants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{
+                duration: 0.2,
+                delay:
+                  dayjs(fullWorkout.workout.createdAt).fromNow() ===
+                  "a few seconds ago"
+                    ? 0
+                    : index * 0.06
+              }}
+              className="w-full"
+              key={fullWorkout.workout.id}>
+              <WorkoutView data={fullWorkout} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+      {isSignedIn ? <LogoutButton /> : <LoginButton />}
+    </aside>
   )
 }
 
-const AuthButton = () => {
-  const { isSignedIn } = useUser()
-
+const LoginButton = () => {
   return (
-    <div className="fixed bottom-0 left-0 w-[400px] bg-zinc-900 px-2 pb-5 pt-3">
-      {isSignedIn && (
-        <SignOutButton>
-          <button className="use-shadow mt-auto w-full rounded py-2 font-medium">
-            Sign Out
-          </button>
-        </SignOutButton>
-      )}
-      {!isSignedIn && (
-        <SignInButton mode="modal">
-          <button className="use-shadow mt-auto w-full rounded py-2 font-medium">
-            Sign In
-          </button>
-        </SignInButton>
-      )}
-    </div>
+    <footer className="flex w-full items-center justify-center bg-zinc-900 pr-3">
+      <SignInButton mode="modal">
+        <button className="use-shadow w-full rounded bg-black py-2 font-medium">
+          Sign In
+        </button>
+      </SignInButton>
+    </footer>
+  )
+}
+
+const LogoutButton = () => {
+  return (
+    <footer className="flex w-full items-center justify-center bg-zinc-900 pr-3">
+      <SignOutButton>
+        <button className="use-shadow w-full rounded bg-black py-2 font-medium">
+          Sign Out
+        </button>
+      </SignOutButton>
+    </footer>
   )
 }

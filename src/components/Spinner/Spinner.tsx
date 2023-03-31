@@ -2,15 +2,23 @@ import clsx from "clsx"
 
 interface SpinnerProps extends React.SVGProps<SVGSVGElement> {
   asPage?: boolean
+  className?: string
 }
 
-export const Spinner = ({ asPage = false, ...props }: SpinnerProps) => {
+export const Spinner = ({
+  className,
+  asPage = false,
+  ...props
+}: SpinnerProps) => {
   return (
     <div
-      className={clsx({
-        "absolute top-0 right-0 flex h-screen w-screen items-center justify-center":
-          asPage
-      })}
+      className={clsx(
+        {
+          "absolute top-0 right-0 flex h-screen w-screen items-center justify-center":
+            asPage
+        },
+        className
+      )}
       role="status">
       <svg
         aria-hidden="true"
