@@ -1,5 +1,10 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
-import { Cross1Icon, HamburgerMenuIcon } from "@radix-ui/react-icons"
+import {
+  Cross1Icon,
+  EnterIcon,
+  ExitIcon,
+  HamburgerMenuIcon
+} from "@radix-ui/react-icons"
 import clsx from "clsx"
 import { Spinner, WorkoutView } from "components"
 import { AnimatePresence, motion } from "framer-motion"
@@ -70,12 +75,29 @@ export const WorkoutFeed = (props: WorkoutFeedProps) => {
         className={clsx("bg-zinc-900 py-3 lg:hidden", {
           "absolute inset-0 flex flex-col gap-2": isSidebarOpen
         })}>
-        <div className="px-3">
+        <div
+          className={clsx("px-3", {
+            "flex h-full flex-col": !isSidebarOpen
+          })}>
           <button
             className="rounded p-2 transition-colors hover:bg-white/5"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             {isSidebarOpen ? <Cross1Icon /> : <HamburgerMenuIcon />}
           </button>
+          {!isSidebarOpen && !isSignedIn && (
+            <SignInButton mode="modal">
+              <button className="use-shadow mt-auto w-full rounded bg-black p-2 font-medium">
+                <EnterIcon />
+              </button>
+            </SignInButton>
+          )}
+          {!isSidebarOpen && isSignedIn && (
+            <SignOutButton>
+              <button className="use-shadow mt-auto w-full rounded bg-black p-2 font-medium">
+                <ExitIcon />
+              </button>
+            </SignOutButton>
+          )}
         </div>
         {isSidebarOpen && (
           <div className="use-scroll flex w-full grow flex-col items-center gap-2 overflow-y-scroll px-3">
