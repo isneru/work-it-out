@@ -48,7 +48,14 @@ export const CreateWorkoutWizard = (props: CreateWorkoutWizardProps) => {
       }
     })
 
-  if (!isLoaded || isLoading) return <Spinner asPage width={60} height={60} />
+  if (!isLoaded || isLoading)
+    return (
+      <Spinner
+        className="flex h-full w-full items-center justify-center"
+        width={60}
+        height={60}
+      />
+    )
 
   return (
     <main className="flex flex-col gap-4 p-6">

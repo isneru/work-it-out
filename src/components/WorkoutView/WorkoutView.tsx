@@ -15,6 +15,7 @@ export const WorkoutView = ({ data }: WorkoutViewProps) => {
       className="flex w-full items-center gap-3 rounded py-1 px-2 transition-colors hover:bg-white/5">
       <Link href={`/user/${owner.id}`}>
         <Image
+          priority
           width={40}
           height={40}
           className="rounded ring-2 ring-white"
