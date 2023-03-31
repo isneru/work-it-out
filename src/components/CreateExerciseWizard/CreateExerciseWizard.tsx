@@ -71,46 +71,72 @@ export const CreateExerciseWizard = ({
                 className="rounded bg-zinc-900 py-1 px-2 outline-none "
               />
             </fieldset>
-            {formData.sets.map((set, index) => (
-              <div key={index} className="grid grid-cols-2">
-                <fieldset
-                  disabled={isMutationLoading}
-                  className="flex flex-col p-3 disabled:opacity-60">
-                  <label htmlFor={`reps${index}`}>Reps</label>
-                  <input
-                    value={set.reps}
-                    onChange={e => handleInputChange(e, index)}
-                    id={`reps${index}`}
-                    type="number"
-                    min={0}
-                    autoComplete="off"
-                    className="rounded bg-zinc-900 py-1 px-2 outline-none"
-                  />
-                </fieldset>
-                <fieldset
-                  disabled={isMutationLoading}
-                  className="group relative flex flex-col p-3 disabled:opacity-60 ">
-                  <label htmlFor={`weightInKg${index}`}>Weight (kg)</label>
-                  <input
-                    value={set.weightInKg}
-                    onChange={e => handleInputChange(e, index)}
-                    id={`weightInKg${index}`}
-                    type="number"
-                    min={0}
-                    autoComplete="off"
-                    className="rounded bg-zinc-900 py-1 px-2 outline-none"
-                  />
-                  {index != 0 && (
-                    <button
-                      onClick={() => removeSetFromForm(index)}
-                      type="button"
-                      className="absolute right-0 top-0 flex h-8 w-8 translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900 opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100 hover:bg-[#17171b]">
-                      <TrashIcon />
-                    </button>
-                  )}
-                </fieldset>
-              </div>
-            ))}
+            <AnimatePresence>
+              {formData.sets.map(
+                (set, index) =>
+                  formData.sets[index] && (
+                    <motion.div
+                      variants={variants}
+                      initial="initial"
+                      animate="animate"
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: {
+                            delay: 0.1,
+                            duration: 0.3
+                          },
+                          opacity: {
+                            delay: 0,
+                            duration: 0.2
+                          }
+                        }
+                      }}
+                      key={index}
+                      className="grid grid-cols-2">
+                      <fieldset
+                        disabled={isMutationLoading}
+                        className="flex flex-col p-3 disabled:opacity-60">
+                        <label htmlFor={`reps${index}`}>Reps</label>
+                        <input
+                          value={set.reps}
+                          onChange={e => handleInputChange(e, index)}
+                          id={`reps${index}`}
+                          type="number"
+                          min={0}
+                          autoComplete="off"
+                          className="rounded bg-zinc-900 py-1 px-2 outline-none"
+                        />
+                      </fieldset>
+                      <fieldset
+                        disabled={isMutationLoading}
+                        className="group relative flex flex-col p-3 disabled:opacity-60 ">
+                        <label htmlFor={`weightInKg${index}`}>
+                          Weight (kg)
+                        </label>
+                        <input
+                          value={set.weightInKg}
+                          onChange={e => handleInputChange(e, index)}
+                          id={`weightInKg${index}`}
+                          type="number"
+                          min={0}
+                          autoComplete="off"
+                          className="rounded bg-zinc-900 py-1 px-2 outline-none"
+                        />
+                        {index != 0 && (
+                          <button
+                            onClick={() => removeSetFromForm(index)}
+                            type="button"
+                            className="absolute right-0 top-0 flex h-8 w-8 translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-zinc-900 opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100 hover:bg-[#17171b]">
+                            <TrashIcon />
+                          </button>
+                        )}
+                      </fieldset>
+                    </motion.div>
+                  )
+              )}
+            </AnimatePresence>
             <button
               disabled={isMutationLoading}
               type="button"
@@ -124,14 +150,14 @@ export const CreateExerciseWizard = ({
                 disabled={isMutationLoading}
                 type="button"
                 onClick={submitForm}
-                className="order-4 m-3 flex items-center justify-center gap-2 rounded bg-white px-3 py-2 font-medium text-black disabled:opacity-60">
+                className="use-shadow order-4 m-3 flex items-center justify-center gap-2 rounded bg-white px-3 py-2 font-medium text-black disabled:opacity-60">
                 Complete
               </button>
               <button
                 type="button"
                 disabled={isMutationLoading}
                 onClick={cleanForm}
-                className="order-3 m-3 flex items-center justify-center gap-2 rounded bg-red-400 px-3 py-2 font-medium text-black transition-colors disabled:opacity-60 hover:bg-red-500">
+                className="use-shadow order-3 m-3 flex items-center justify-center gap-2 rounded bg-red-400 px-3 py-2 font-medium text-black transition-colors disabled:opacity-60 hover:bg-red-500">
                 Cancel
               </button>
             </div>
