@@ -30,12 +30,29 @@ export const WorkoutFeed = (props: WorkoutFeedProps) => {
         className={clsx("hidden bg-zinc-900 py-3 lg:flex", {
           "flex w-[400px] flex-col gap-2 bg-zinc-900": isSidebarOpen
         })}>
-        <div className="px-3">
+        <div
+          className={clsx("px-3", {
+            "flex h-full flex-col": !isSidebarOpen
+          })}>
           <button
             className="rounded p-2 transition-colors hover:bg-white/5"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             {isSidebarOpen ? <Cross1Icon /> : <HamburgerMenuIcon />}
           </button>
+          {!isSidebarOpen && !isSignedIn && (
+            <SignInButton mode="modal">
+              <button className="use-shadow mt-auto w-full rounded bg-black p-2 font-medium">
+                <EnterIcon />
+              </button>
+            </SignInButton>
+          )}
+          {!isSidebarOpen && isSignedIn && (
+            <SignOutButton>
+              <button className="use-shadow mt-auto w-full rounded bg-black p-2 font-medium">
+                <ExitIcon />
+              </button>
+            </SignOutButton>
+          )}
         </div>
         {isSidebarOpen && (
           <div className="use-scroll flex w-full grow flex-col items-center gap-2 overflow-y-scroll px-3">
