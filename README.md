@@ -1,28 +1,32 @@
-# Create T3 App
+<br/>
+<h1 align="center">Work it Out</h3>
+<br/>
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## About
 
-## What's next? How do I make an app with this?
+**Work it Out** is a fitness tracking web application that helps users keep track of their workout routines and progress. The app provides an easy-to-use interface for creating workout plans, logging workouts, and tracking progress over time.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Getting Started
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Installation
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+1. Clone the repo
 
-## Learn More
+```sh
+git clone https://github.com/isneru/work-it-out
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+2. Navigate to the project directory and install the necessary dependencies
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```sh
+cd work-it-out
+npm i
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+3. Create a `.env` file and populate the variables from `.env.example`
 
-## How do I deploy this?
+4. Start the Application
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```sh
+npm run dev
+```
