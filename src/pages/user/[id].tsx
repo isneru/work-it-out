@@ -1,34 +1,26 @@
-import { Spinner } from "components"
+import { ErrorPage, NestedPageLayout, Spinner } from "components"
 import { type GetStaticProps, type NextPage } from "next"
 import Head from "next/head"
-import Link from "next/link"
 import { ssg } from "server/helpers/ssg"
 import { api } from "utils/api"
 
 const SingleUserPage: NextPage<{ userId: string }> = ({ userId }) => {
-  const { data, isLoading } = api.users.getById.useQuery({ userId })
+  const { data, isLoading } = api.users.getById.useQuery({
+    userId,
+    withWorkouts: true
+  })
 
   if (isLoading) return <Spinner asPage width={60} height={60} />
-  if (!data)
-    return (
-      <div className="absolute top-0 right-0 flex h-screen w-screen flex-col items-center justify-center">
-        404
-        <Link className="underline" href="/">
-          Go Back
-        </Link>
-      </div>
-    )
+  if (!data) return <ErrorPage />
 
   return (
     <>
       <Head>
         <title>{`${data.username}'s profile`}</title>
       </Head>
-      <main className="flex min-h-screen">
-        <div className="flex grow flex-col items-center justify-center">
-          <h1>User Page</h1>
-        </div>
-      </main>
+      <NestedPageLayout>
+        <h1>User Page</h1>
+      </NestedPageLayout>
     </>
   )
 }

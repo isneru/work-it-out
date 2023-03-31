@@ -2,7 +2,7 @@ import {
   CreateExerciseWizard,
   ErrorPage,
   ExerciseFeed,
-  Layout,
+  NestedPageLayout,
   Spinner
 } from "components"
 import { type GetStaticProps, type NextPage } from "next"
@@ -32,16 +32,14 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
 
   if (isLoading)
     return (
-      <Layout>
-        <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md min-[1200px]:max-h-[80%] min-[1200px]:w-[90%] 2xl:w-2/3">
-          <div className="flex items-center justify-center">
-            <Spinner width={40} height={40} />
-          </div>
-          <div className="flex items-center justify-center">
-            <Spinner width={40} height={40} />
-          </div>
+      <NestedPageLayout className="grid grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0">
+        <div className="flex items-center justify-center">
+          <Spinner width={40} height={40} />
         </div>
-      </Layout>
+        <div className="flex items-center justify-center">
+          <Spinner width={40} height={40} />
+        </div>
+      </NestedPageLayout>
     )
 
   if (!data) return <ErrorPage />
@@ -51,49 +49,47 @@ const SingleWorkoutPage: NextPage<{ workoutId: string }> = ({ workoutId }) => {
       <Head>
         <title>Workout</title>
       </Head>
-      <Layout>
-        <div className="grid h-full w-full grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 bg-zinc-900 py-5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0 lg:rounded-md min-[1200px]:max-h-[80%] min-[1200px]:w-[90%] 2xl:w-2/3">
-          <div className="flex flex-col gap-4 py-5 px-5">
-            <h1 className="text-3xl font-bold">Viewing Workout</h1>
-            <div className="flex items-center gap-3">
-              <Image
-                width={40}
-                height={40}
-                className="rounded ring-2 ring-white"
-                src={data.owner.profileImageUrl}
-                alt={`${data.owner.username}'s profile picture`}
-              />
-              <div>
-                <p className="font-medium">
-                  created by{" "}
-                  <Link
-                    className="hover:underline"
-                    href={`/user/${data.owner.id}`}>
-                    {data.owner.username}
-                  </Link>
-                </p>
-                <p className="text-zinc-400">
-                  {dayjs(data.workout.createdAt).format("Do MMMM YYYY")}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-center gap-4 py-5 pl-5 pr-3">
-            <span className="text-3xl font-bold">Exercises</span>
-            <div
-              id="form"
-              ref={ref}
-              className="use-scroll w-full overflow-y-scroll pr-2">
-              <ExerciseFeed workoutId={workoutId} />
-              <CreateExerciseWizard
-                hasPermissions={data.hasPermissions}
-                refetch={refetch}
-                workoutId={workoutId}
-              />
+      <NestedPageLayout className="grid grid-cols-1 grid-rows-2 divide-y divide-x-0 divide-white/5 lg:grid-cols-2 lg:grid-rows-1 lg:divide-x lg:divide-y-0">
+        <div className="flex flex-col gap-4 py-5 px-5">
+          <h1 className="text-3xl font-bold">Viewing Workout</h1>
+          <div className="flex items-center gap-3">
+            <Image
+              width={40}
+              height={40}
+              className="rounded ring-2 ring-white"
+              src={data.owner.profileImageUrl}
+              alt={`${data.owner.username}'s profile picture`}
+            />
+            <div>
+              <p className="font-medium">
+                created by{" "}
+                <Link
+                  className="hover:underline"
+                  href={`/user/${data.owner.id}`}>
+                  {data.owner.username}
+                </Link>
+              </p>
+              <p className="text-zinc-400">
+                {dayjs(data.workout.createdAt).format("Do MMMM YYYY")}
+              </p>
             </div>
           </div>
         </div>
-      </Layout>
+        <div className="flex flex-col items-center gap-4 py-5 pl-5 pr-3">
+          <span className="text-3xl font-bold">Exercises</span>
+          <div
+            id="form"
+            ref={ref}
+            className="use-scroll w-full overflow-y-scroll pr-2">
+            <ExerciseFeed workoutId={workoutId} />
+            <CreateExerciseWizard
+              hasPermissions={data.hasPermissions}
+              refetch={refetch}
+              workoutId={workoutId}
+            />
+          </div>
+        </div>
+      </NestedPageLayout>
     </>
   )
 }
