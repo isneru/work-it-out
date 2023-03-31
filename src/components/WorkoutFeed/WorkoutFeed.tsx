@@ -24,7 +24,7 @@ export const WorkoutFeed = (props: WorkoutFeedProps) => {
     <aside className="flex w-[400px] flex-col items-center gap-2 bg-zinc-900 py-5 pl-5 pr-2">
       <div className="use-scroll flex w-full grow flex-col items-center gap-2 overflow-y-scroll">
         <AnimatePresence>
-          {[...data!, ...data!, ...data!]?.map((fullWorkout, index) => (
+          {data?.map((fullWorkout, index) => (
             <motion.div
               variants={variants}
               initial="initial"
