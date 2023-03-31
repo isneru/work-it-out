@@ -13,13 +13,15 @@ export const WorkoutView = ({ data }: WorkoutViewProps) => {
     <Link
       href={`/workout/${workout.id}`}
       className="flex w-full items-center gap-3 rounded py-1 px-2 transition-colors hover:bg-white/5">
-      <Image
-        width={40}
-        height={40}
-        className="rounded ring-2 ring-white"
-        src={owner.profileImageUrl}
-        alt={`${owner.username}'s profile picture`}
-      />
+      <Link href={`/user/${owner.id}`}>
+        <Image
+          width={40}
+          height={40}
+          className="rounded ring-2 ring-white"
+          src={owner.profileImageUrl}
+          alt={`${owner.username}'s profile picture`}
+        />
+      </Link>
       <div>
         <p className="font-medium">
           Workout by{" "}
