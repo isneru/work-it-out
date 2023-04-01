@@ -48,7 +48,7 @@ const LoginButton = ({ asMobile = false }: { asMobile?: boolean }) => {
   return asMobile ? (
     <footer className="mt-auto">
       <SignInButton mode="modal">
-        <button className="use-shadow rounded bg-black p-2">
+        <button className="rounded bg-black p-2">
           <EnterIcon />
         </button>
       </SignInButton>
@@ -68,7 +68,7 @@ const LogoutButton = ({ asMobile = false }: { asMobile?: boolean }) => {
   return asMobile ? (
     <footer className="mt-auto">
       <SignOutButton>
-        <button className="use-shadow rounded bg-black p-2">
+        <button className="rounded bg-black p-2">
           <ExitIcon />
         </button>
       </SignOutButton>
