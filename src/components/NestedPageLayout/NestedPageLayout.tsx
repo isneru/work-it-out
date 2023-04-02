@@ -12,12 +12,12 @@ export const NestedPageLayout = ({ className, children }: LayoutProps) => {
       <div className="flex grow flex-col items-center justify-center">
         <div
           className={clsx(
-            "h-full w-full bg-zinc-900 py-5 lg:rounded-md min-[1200px]:max-h-[80%] min-[1200px]:w-[90%] 2xl:w-2/3",
+            "w-full bg-zinc-900 py-5 lg:rounded-md min-[1200px]:h-full min-[1200px]:max-h-[80%] min-[1200px]:w-[90%] 2xl:w-2/3",
             className
           )}>
           {children}
         </div>
-        <GoBackLink className="absolute bottom-4 left-4" />
+        <GoBackLink className="fixed bottom-4 left-4" />
       </div>
     </div>
   )
