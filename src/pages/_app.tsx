@@ -3,7 +3,7 @@ import { dark } from "@clerk/themes"
 import { type AppType } from "next/app"
 import Head from "next/head"
 import { api } from "utils/api"
-import { ToastProvider } from "utils/providers"
+import { SidebarProvider, ToastProvider } from "utils/providers"
 
 import "styles/globals.css"
 
@@ -20,7 +20,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToastProvider>
-        <Component {...pageProps} />
+        <SidebarProvider>
+          <Component {...pageProps} />
+        </SidebarProvider>
       </ToastProvider>
     </ClerkProvider>
   )

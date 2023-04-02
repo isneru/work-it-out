@@ -1,8 +1,9 @@
 import { useUser } from "@clerk/nextjs"
 import { ClosedSidebar } from "components/Sidebar/ClosedSidebar"
 import { OpenSidebar } from "components/Sidebar/OpenSidebar"
-import { useState } from "react"
+import { useContext } from "react"
 import { api } from "utils/api"
+import { SidebarContext } from "utils/providers"
 
 export interface SharedAuthButtonProps {
   isSignedIn: boolean
@@ -16,11 +17,7 @@ export interface SharedSidebarProps {
 }
 
 export const Sidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
-  function toggleSidebar() {
-    setIsSidebarOpen(isOpen => !isOpen)
-  }
+  const { isSidebarOpen, toggleSidebar } = useContext(SidebarContext)
   const { data, isLoading } = api.workouts.getAll.useQuery()
 
   const { isSignedIn, isLoaded } = useUser()
