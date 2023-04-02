@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/nextjs"
-import { CreateWorkoutWizard, WorkoutFeed } from "components"
+import { CreateWorkoutWizard, Sidebar } from "components"
 import { type NextPage } from "next"
 import { api } from "utils/api"
 
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
   return (
     <div className="flex h-screen">
-      <WorkoutFeed />
+      <Sidebar />
       <div className="flex grow">{isSignedIn && <CreateWorkoutWizard />}</div>
     </div>
   )
